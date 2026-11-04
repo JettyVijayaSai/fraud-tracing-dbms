@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
 import { GitBranch, Clock, DollarSign, Layers, AlertCircle, RefreshCw, Smartphone, Phone, Globe } from 'lucide-react';
+import { API_BASE } from '../apiConfig';
 
 cytoscape.use(dagre);
 
@@ -20,7 +21,7 @@ export default function TemporalTraceGraph({ rootTxnId, onSelectAccount }) {
     if (!rootTxnId) return;
     setLoading(true);
     try {
-      const res = await fetch(`/api/trace/${rootTxnId}?hours=${hoursWindow}&max_hops=${maxHops}`);
+      const res = await fetch(`${API_BASE}/api/trace/${rootTxnId}?hours=${hoursWindow}&max_hops=${maxHops}`);
       if (!res.ok) throw new Error("Failed to trace transaction");
       const data = await res.json();
       setTrailSummary(data.traversal_summary);
@@ -29,7 +30,7 @@ export default function TemporalTraceGraph({ rootTxnId, onSelectAccount }) {
       const accountIds = data.graph.nodes.map(n => n.account_id);
       let signals = [];
       if (accountIds.length > 0) {
-        const sigRes = await fetch('/api/mule-signals', {
+        const sigRes = await fetch(`${API_BASE}/api/mule-signals`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ account_ids: accountIds })

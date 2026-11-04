@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { AlertTriangle, Play, RefreshCw, Filter, ShieldAlert, Zap, ArrowRight } from 'lucide-react';
+import { API_BASE, getWsUrl } from '../apiConfig';
 
 export default function LiveAlertFeed({ onSelectAlert, onTraceTxn, selectedAlertId }) {
   const [alerts, setAlerts] = useState([]);
@@ -11,7 +12,7 @@ export default function LiveAlertFeed({ onSelectAlert, onTraceTxn, selectedAlert
   const fetchAlerts = async () => {
     setLoading(true);
     try {
-      let url = `/api/alerts?min_risk=${minRisk}&limit=100`;
+      let url = `${API_BASE}/api/alerts?min_risk=${minRisk}&limit=100`;
       if (filterRule) url += `&rule_code=${filterRule}`;
       const res = await fetch(url);
       if (res.ok) {
@@ -29,8 +30,7 @@ export default function LiveAlertFeed({ onSelectAlert, onTraceTxn, selectedAlert
     fetchAlerts();
 
     // WebSocket connection to PostgreSQL LISTEN/NOTIFY channel
-    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const wsUrl = `${protocol}//${window.location.host}/ws/alerts`;
+    const wsUrl = getWsUrl('/ws/alerts');
     let ws;
 
     try {
@@ -58,7 +58,7 @@ export default function LiveAlertFeed({ onSelectAlert, onTraceTxn, selectedAlert
   const handleSweep = async () => {
     setLoading(true);
     try {
-      const res = await fetch('/api/alerts/sweep', { method: 'POST' });
+      const res = await fetch(`${API_BASE}/api/alerts/sweep`, { method: 'POST' });
       if (res.ok) {
         await fetchAlerts();
       }

@@ -1,3 +1,4 @@
+import os
 import json
 import time
 import psycopg
@@ -6,7 +7,7 @@ from rich.console import Console
 from rich.table import Table
 
 console = Console()
-DB_URL = "postgresql://postgres:postgrespassword@localhost:5432/fraud_tracing_db"
+DB_URL = os.getenv("DATABASE_URL", "postgresql://postgres:postgrespassword@localhost:5432/fraud_tracing_db")
 
 def evaluate_detection_metrics():
     console.print("\n[bold cyan]1. Evaluating SQL Anomaly Detection Rules against Planted Ground Truth...[/bold cyan]")

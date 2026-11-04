@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BarChart3, TrendingUp, Cpu, Gauge, Zap, CheckCircle, XCircle, RefreshCw, Terminal } from 'lucide-react';
+import { API_BASE } from '../apiConfig';
 
 export default function BenchmarkDashboard() {
   const [evalData, setEvalData] = useState(null);
@@ -9,7 +10,7 @@ export default function BenchmarkDashboard() {
 
   const fetchEvaluation = async () => {
     try {
-      const res = await fetch('/api/metrics/evaluation');
+      const res = await fetch(`${API_BASE}/api/metrics/evaluation`);
       if (res.ok) {
         const data = await res.json();
         setEvalData(data);
@@ -22,7 +23,7 @@ export default function BenchmarkDashboard() {
   const fetchExplain = async (qType) => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/metrics/explain?query_type=${qType}`);
+      const res = await fetch(`${API_BASE}/api/metrics/explain?query_type=${qType}`);
       if (res.ok) {
         const data = await res.json();
         setExplainData(data);

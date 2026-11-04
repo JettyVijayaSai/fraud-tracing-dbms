@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Smartphone, Phone, Globe, Info, Search, ShieldCheck } from 'lucide-react';
+import { API_BASE } from '../apiConfig';
 
 export default function MuleNetworkPanel({ investigatedAccounts = [] }) {
   const [accountInput, setAccountInput] = useState(investigatedAccounts.join(', '));
@@ -13,7 +14,7 @@ export default function MuleNetworkPanel({ investigatedAccounts = [] }) {
 
     setLoading(true);
     try {
-      const res = await fetch('/api/mule-signals', {
+      const res = await fetch(`${API_BASE}/api/mule-signals`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ account_ids: rawIds })

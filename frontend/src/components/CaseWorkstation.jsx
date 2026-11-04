@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Briefcase, Snowflake, CheckCircle2, FileText, Send, Database, AlertTriangle, ShieldAlert } from 'lucide-react';
+import { API_BASE } from '../apiConfig';
 
 export default function CaseWorkstation({ selectedAlert, prefilledAccountId, onDecisionRecorded }) {
   const [cases, setCases] = useState([]);
@@ -15,7 +16,7 @@ export default function CaseWorkstation({ selectedAlert, prefilledAccountId, onD
 
   const fetchCases = async () => {
     try {
-      const res = await fetch('/api/cases');
+      const res = await fetch(`${API_BASE}/api/cases`);
       if (res.ok) {
         const data = await res.json();
         setCases(data);
@@ -31,7 +32,7 @@ export default function CaseWorkstation({ selectedAlert, prefilledAccountId, onD
   const fetchCaseDetails = async (cid) => {
     if (!cid) return;
     try {
-      const res = await fetch(`/api/cases/${cid}`);
+      const res = await fetch(`${API_BASE}/api/cases/${cid}`);
       if (res.ok) {
         const data = await res.json();
         setCaseDetails(data);
@@ -67,7 +68,7 @@ export default function CaseWorkstation({ selectedAlert, prefilledAccountId, onD
         priority: newPriority,
         alert_ids: selectedAlert ? [selectedAlert.alert_id] : []
       };
-      const res = await fetch('/api/cases', {
+      const res = await fetch(`${API_BASE}/api/cases`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
@@ -90,7 +91,7 @@ export default function CaseWorkstation({ selectedAlert, prefilledAccountId, onD
     e.preventDefault();
     if (!noteText || !selectedCaseId) return;
     try {
-      const res = await fetch(`/api/cases/${selectedCaseId}/notes`, {
+      const res = await fetch(`${API_BASE}/api/cases/${selectedCaseId}/notes`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ note_text: noteText, author_role: 'investigator_role' })
@@ -111,7 +112,7 @@ export default function CaseWorkstation({ selectedAlert, prefilledAccountId, onD
     }
     setLoading(true);
     try {
-      const res = await fetch(`/api/cases/${selectedCaseId}/decisions`, {
+      const res = await fetch(`${API_BASE}/api/cases/${selectedCaseId}/decisions`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

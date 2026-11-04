@@ -1,4 +1,5 @@
 import asyncio
+import os
 import time
 from decimal import Decimal
 import psycopg
@@ -7,7 +8,7 @@ from rich.console import Console
 from rich.table import Table
 
 console = Console()
-DB_URL = "postgresql://postgres:postgrespassword@localhost:5432/fraud_tracing_db"
+DB_URL = os.getenv("DATABASE_URL", "postgresql://postgres:postgrespassword@localhost:5432/fraud_tracing_db")
 
 def test_idempotent_replay():
     console.print("\n[bold cyan]1. Testing Concurrent Idempotency Replays (10 identical calls)...[/bold cyan]")

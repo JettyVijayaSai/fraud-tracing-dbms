@@ -13,10 +13,10 @@ from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, TimeEl
 
 console = Console()
 
-DB_URL = "postgresql://postgres:postgrespassword@localhost:5432/fraud_tracing_db"
+DB_URL = os.getenv("DATABASE_URL", "postgresql://postgres:postgrespassword@localhost:5432/fraud_tracing_db")
 
-def get_db():
-    return psycopg.connect(DB_URL, autocommit=False)
+def get_db(url=None):
+    return psycopg.connect(url or DB_URL, autocommit=False)
 
 def generate_master_entities(conn, num_customers=5000, num_accounts=8000, num_devices=3000, num_phones=5000, num_ips=2000):
     console.print(f"[bold cyan]Phase 1:[/bold cyan] Bulk generating master entities ({num_customers} customers, {num_accounts} accounts, {num_devices} devices, {num_phones} phones, {num_ips} IPs)...")

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ShieldCheck, ShieldAlert, RefreshCw, Download, Lock, CheckCircle2, AlertOctagon } from 'lucide-react';
+import { API_BASE } from '../apiConfig';
 
 export default function AuditVerifier() {
   const [verificationResult, setVerificationResult] = useState(null);
@@ -9,12 +10,12 @@ export default function AuditVerifier() {
   const runVerification = async () => {
     setLoading(true);
     try {
-      const res = await fetch('/api/audit/verify');
+      const res = await fetch(`${API_BASE}/api/audit/verify`);
       if (res.ok) {
         const data = await res.json();
         setVerificationResult(data);
       }
-      const logRes = await fetch('/api/audit/logs?limit=50');
+      const logRes = await fetch(`${API_BASE}/api/audit/logs?limit=50`);
       if (logRes.ok) {
         const logData = await logRes.json();
         setAuditLogs(logData);

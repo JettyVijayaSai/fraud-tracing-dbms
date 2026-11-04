@@ -1,5 +1,6 @@
 import asyncio
 import time
+import os
 from decimal import Decimal
 import psycopg
 from psycopg.rows import dict_row
@@ -7,7 +8,7 @@ from rich.console import Console
 from rich.table import Table
 
 console = Console()
-DB_URL = "postgresql://postgres:postgrespassword@localhost:5432/fraud_tracing_db"
+DB_URL = os.getenv("DATABASE_URL", "postgresql://postgres:postgrespassword@localhost:5432/fraud_tracing_db")
 
 def reset_test_account(account_id: int, initial_balance: Decimal = Decimal("1000.00")):
     with psycopg.connect(DB_URL, autocommit=True) as conn:

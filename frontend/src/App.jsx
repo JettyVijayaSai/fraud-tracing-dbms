@@ -17,6 +17,7 @@ import MuleNetworkPanel from './components/MuleNetworkPanel';
 import CaseWorkstation from './components/CaseWorkstation';
 import AuditVerifier from './components/AuditVerifier';
 import BenchmarkDashboard from './components/BenchmarkDashboard';
+import { API_BASE } from './apiConfig';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('tracing'); // 'alerts', 'tracing', 'mule', 'cases', 'audit', 'benchmark'
@@ -27,7 +28,7 @@ export default function App() {
 
   const fetchStats = async () => {
     try {
-      const res = await fetch('/api/metrics/system-stats');
+      const res = await fetch(`${API_BASE}/api/metrics/system-stats`);
       if (res.ok) {
         const data = await res.json();
         setSystemStats(data);
